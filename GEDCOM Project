@@ -1,6 +1,5 @@
-# Daniel Heyman
-# CS 555
-# Project 02
+# Team code for GEDCOM Project SSW 555
+# Daniel Heyman, Danielle Romanoff, and Matthew Melachrinos
 
 import sys  # graceful exit
 
