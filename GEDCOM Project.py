@@ -40,7 +40,6 @@ def isDateBeforeOrEqual(date1,date2):
         return False
     return False
 
-
 zero_tags = ["HEAD", "TRLR", "NOTE"]
 one_tags = ["NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"]
 two_tags = ["DATE"]
@@ -76,11 +75,13 @@ for line in file:
         if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
             individuals[id_num][date_type] = ' '.join(parts[2:])
 
+
 print "\nIndividuals:"
 print "***************\n"
 for individual in sorted(individuals.keys()):
     print "Individual ID:", individual
-    print "Name:", individuals[individual]["NAME"], "\n"
+    print "Name:", individuals[individual]["NAME"],"\n"
+#    print "Birth:", individuals[individual]["BIRT"],"\n"
 
 print "\nFamilies:"
 print "************\n"
@@ -90,3 +91,38 @@ for family in sorted(families.keys()):
         if member[0] in family_tags:
             print family_tags[member[0]] + ": " + individuals[member[1]]['NAME']
     print ""
+
+
+#---------Error Checking---------
+
+for family in families:
+    husbandID = ""
+    wifeID = ""
+    weddingDate = ""
+    divorceDate = ""
+
+    for item in families[family]:
+        if item[0] == "HUSB":
+            husbandID = item[1]
+        if item[0] == "WIFE":
+            wifeID = item[1]
+        if item[0] == "MARR":
+            weddingDate = item[1]
+        if item[0] == "DIV":
+            divorceDate = item[1]
+
+    #---------US04---------
+    if weddingDate != "" and divorceDate != "" and isDateBeforeOrEqual(divorceDate,weddingDate):
+        print "ERROR: Divorce date before Wedding date for " , individuals[husbandID]["NAME"], " and " , individuals[wifeID]["NAME"]
+    #---------US04---------
+
+
+    #---------US05---------
+    if husbandID and wifeID and weddingDate:
+        husbandBirthDay = individuals[husbandID]["BIRT"]
+        wifeBirthDay = individuals[wifeID]["BIRT"]
+        if isDateBeforeOrEqual(weddingDate,husbandBirthDay):
+            "ERROR: Wedding date before the birth of ", individuals[husbandID]["NAME"]
+        if isDateBeforeOrEqual(weddingDate,wifeBirthDay):
+            "ERROR: Wedding date before the birth of ", individuals[wifeID]["NAME"]
+    #---------US05---------
