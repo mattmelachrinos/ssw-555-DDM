@@ -13,6 +13,34 @@ except:
     print 'That is an incorrect file name.'
     sys.exit()
 
+def isDateBeforeOrEqual(date1,date2):
+    months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
+
+    date1year = int(date1[-4:])
+    date1month = date1[-7:-4]
+    date1date = date1[:-7]
+
+    date2year = int(date2[-4:])
+    date2month = date2[-7:-4]
+    date2date = int(date2[:-7])
+
+    if date1year < date2year:
+        return True
+    elif date1year==date2year:
+        for item in months:
+            if date1month == item:
+                date1month = int(months.index(item))
+            if date2month == item:
+                date2month = int(months.index(item))
+        if date1month < date2month:
+            return True
+        elif date1month == date2month:
+            if date1date <= date2date:
+                return True
+        return False
+    return False
+
+
 zero_tags = ["HEAD", "TRLR", "NOTE"]
 one_tags = ["NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"]
 two_tags = ["DATE"]
