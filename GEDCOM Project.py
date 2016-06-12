@@ -80,8 +80,8 @@ print "\nIndividuals:"
 print "***************\n"
 for individual in sorted(individuals.keys()):
     print "Individual ID:", individual
-    print "Name:", individuals[individual]["NAME"],"\n"
-#    print "Birth:", individuals[individual]["BIRT"],"\n"
+    print "Name:", individuals[individual]["NAME"]
+    print "Birth:", individuals[individual]["BIRT"],"\n"
 
 print "\nFamilies:"
 print "************\n"
