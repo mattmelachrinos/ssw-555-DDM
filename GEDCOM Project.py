@@ -71,7 +71,7 @@ for line in file:
             if id_type == 'FAM':
                 families[id_num] += [[parts[1], parts[2]]]
         if parts[0] == '1' and parts[1] in ["BIRT", "DEAT", "MARR", "DIV"]:
-            date_type = parts[0]
+            date_type = parts[1]
         if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
             individuals[id_num][date_type] = ' '.join(parts[2:])
 
