@@ -116,9 +116,9 @@ for family in families:
         husbandBirthDay = individuals[husbandID]["BIRT"]
         wifeBirthDay = individuals[wifeID]["BIRT"]
         if isDateBeforeOrEqual(weddingDate,husbandBirthDay):
-            "ERROR: The wedding date is before the birth of ", individuals[husbandID]["NAME"]
+            print "ERROR: The wedding date is before the birth of ", individuals[husbandID]["NAME"]
         if isDateBeforeOrEqual(weddingDate,wifeBirthDay):
-            "ERROR: The wedding date is before the birth of ", individuals[wifeID]["NAME"]
+            print "ERROR: The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
 
     #---------US04---------
@@ -129,10 +129,10 @@ for family in families:
     
     #---------US05---------
     if husbandID and wifeID and weddingDate:
-    husbandDeathDay = individuals[husbandID]["DEAT"]
-    wifeDeathDay = individuals[wifeID]["DEAT"]
-    if isDateBeforeOrEqual(husbandDeathDay, weddingDate):
-        "ERROR: The wedding date is after the death of ", individuals[husbandID]["NAME"]
-    if isDateBeforeOrEqual(wifeDeathDay, weddingDate):
-        "ERROR: The wedding date is after the death of ", individuals[wifeID]["NAME"]
+    husbanddeathDay = individuals[husbandID]["DEAT"]
+    wifedeathDay = individuals[wifeID]["DEAT"]
+    if isDateBeforeOrEqual(husbanddeathDay, weddingDate):
+        print "ERROR: The wedding date is after the death of ", individuals[husbandID]["NAME"]
+    if isDateBeforeOrEqual(wifedeathDay, weddingDate):
+        print "ERROR: The wedding date is after the death of ", individuals[wifeID]["NAME"]
     #---------US05-----------
