@@ -116,9 +116,9 @@ for family in families:
         husbandBirthDay = individuals[husbandID]["BIRT"]
         wifeBirthDay = individuals[wifeID]["BIRT"]
         if isDateBeforeOrEqual(weddingDate,husbandBirthDay):
-            "ERROR: Wedding date before the birth of ", individuals[husbandID]["NAME"]
+            "ERROR: The wedding date is before the birth of ", individuals[husbandID]["NAME"]
         if isDateBeforeOrEqual(weddingDate,wifeBirthDay):
-            "ERROR: Wedding date before the birth of ", individuals[wifeID]["NAME"]
+            "ERROR: The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
 
     #---------US04---------
