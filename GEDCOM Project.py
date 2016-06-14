@@ -133,8 +133,8 @@ for family in families:
 
     #---------US05---------
     if husbandID and wifeID and weddingDate:
-    husbanddeathDay = individuals[husbandID]["DEAT"]
-    wifedeathDay = individuals[wifeID]["DEAT"]
+        husbanddeathDay = individuals[husbandID]["DEAT"]
+        wifedeathDay = individuals[wifeID]["DEAT"]
     if isDateBeforeOrEqual(husbanddeathDay, weddingDate):
         print "ERROR: The wedding date is after the death of ", individuals[husbandID]["NAME"]
     if isDateBeforeOrEqual(wifedeathDay, weddingDate):
