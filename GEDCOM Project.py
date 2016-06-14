@@ -110,14 +110,8 @@ for family in families:
             weddingDate = item[1]
         if item[0] == "DIV":
             divorceDate = item[1]
-
-    #---------US04---------
-    if weddingDate != "" and divorceDate != "" and isDateBeforeOrEqual(divorceDate,weddingDate):
-        print "ERROR: Divorce date before Wedding date for " , individuals[husbandID]["NAME"], " and " , individuals[wifeID]["NAME"]
-    #---------US04---------
-
-
-    #---------US02---------
+            
+        #---------US02---------
     if husbandID and wifeID and weddingDate:
         husbandBirthDay = individuals[husbandID]["BIRT"]
         wifeBirthDay = individuals[wifeID]["BIRT"]
@@ -126,6 +120,12 @@ for family in families:
         if isDateBeforeOrEqual(weddingDate,wifeBirthDay):
             "ERROR: Wedding date before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
+
+    #---------US04---------
+    if weddingDate != "" and divorceDate != "" and isDateBeforeOrEqual(divorceDate,weddingDate):
+        print "ERROR: Divorce date before Wedding date for " , individuals[husbandID]["NAME"], " and " , individuals[wifeID]["NAME"]
+    #---------US04---------
+
     
     #---------US05---------
     if husbandID and wifeID and weddingDate:
