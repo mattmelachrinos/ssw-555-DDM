@@ -40,38 +40,55 @@ def isDateBeforeOrEqual(date1,date2):
         return False
     return False
 
+# All the valid tags
 zero_tags = ["HEAD", "TRLR", "NOTE"]
 one_tags = ["NAME", "SEX", "BIRT", "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"]
 two_tags = ["DATE"]
 tags = [zero_tags, one_tags, two_tags]
 
+# Object for all the family members. Key is based off of the family ID
 families = {}
+
+# Object for all the individuals. Key is based off of the individual ID
 individuals = {}
-id_type = 'none'
+
+# Current individual or family
+id_type = 'none' # When active, will be marked with FAM or INDI
 id_num = ''
+
+# Keeps track of the dates
 date_type = ''
+
+# The dictionary of valid family tags
 family_tags = {"HUSB": "Husband", "WIFE": "Wife", "CHIL": "Child"}
 
-
+# Loop through all the lines in the GEDCOM file
 for line in file:
     line = line.lstrip().rstrip()
     parts = line.split(' ')
 
+    # Case that marks the beginning of a new family or individual
     if len(parts) == 3 and parts[0] == '0' and parts[2] in ["FAM","INDI"]:
         id_type = parts[2]
         id_num = parts[1]
+        
+        # Initiate the object for the new family or individual
         if(id_type == 'INDI'):
             individuals[id_num] = {}
         else:
             families[id_num] = []
+    # Ensure that the tag is valid
     elif int(parts[0]) < 3 and parts[1] in tags[int(parts[0])]:
+        # Add a tag to the family or individual
         if parts[0] == '1' and len(parts) > 2:
             if id_type == 'INDI':
                 individuals[id_num][parts[1]] = ' '.join(parts[2:])
             if id_type == 'FAM':
                 families[id_num] += [[parts[1], parts[2]]]
+        # Prepare to add a date tag
         if parts[0] == '1' and parts[1] in ["BIRT", "DEAT", "MARR", "DIV"]:
             date_type = parts[1]
+        # Add the date based on the previously found tag
         if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
             individuals[id_num][date_type] = ' '.join(parts[2:])
 
