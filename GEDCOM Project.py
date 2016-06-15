@@ -2,6 +2,7 @@
 # Daniel Heyman, Danielle Romanoff, and Matthew Melachrinos
 
 import sys  # graceful exit
+import time # current date
 
 # open and read GEDCOM file
 fname = raw_input('Please enter the file name: ')
@@ -12,17 +13,19 @@ try:
 except:
     print 'That is an incorrect file name.'
     sys.exit()
+    
+currentDate = time.strftime("%d %b %Y") # 19 JAN 2007
 
 def isDateBeforeOrEqual(date1,date2):
     months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 
     date1year = int(date1[-4:])
-    date1month = date1[-7:-4]
-    date1date = date1[:-7]
+    date1month = date1[-8:-5].upper()
+    date1date = date1[:-9]
 
     date2year = int(date2[-4:])
-    date2month = date2[-7:-4]
-    date2date = int(date2[:-7])
+    date2month = date2[-8:-5].upper()
+    date2date = int(date2[:-9])
 
     if date1year < date2year:
         return True
@@ -90,7 +93,12 @@ for line in file:
             date_type = parts[1]
         # Add the date based on the previously found tag
         if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
-            individuals[id_num][date_type] = ' '.join(parts[2:])
+            # BIRT and DEAT tags belong to an individual
+            if id_type == 'INDI' and date_type in ["BIRT", "DEAT"]:
+                individuals[id_num][date_type] = ' '.join(parts[2:])
+            # MARR and DIV belong to a family
+            elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
+                families[id_num] += [[date_type, ' '.join(parts[2:])]]
 
 
 print "\nIndividuals:"
@@ -98,7 +106,8 @@ print "***************\n"
 for individual in sorted(individuals.keys()):
     print "Individual ID:", individual
     print "Name:", individuals[individual]["NAME"]
-    print "Birth:", individuals[individual]["BIRT"],"\n"
+    if individuals[individual].has_key('BIRT'):
+        print "Birth:", individuals[individual]["BIRT"],"\n"
 
 print "\nFamilies:"
 print "************\n"
@@ -111,6 +120,21 @@ for family in sorted(families.keys()):
 
 
 #---------Error Checking---------
+
+for individual_id in individuals:
+    individual = individuals[individual_id]
+    
+    #---------US01---------
+    if individual.has_key('BIRT') and isDateBeforeOrEqual(currentDate, individual['BIRT']):
+        print "ERROR: The birth date is after current date for " , individual["NAME"]
+    if individual.has_key('DEAT') and isDateBeforeOrEqual(currentDate, individual['DEAT']):
+        print "ERROR: The death date is after current date for " , individual["NAME"]
+    #---------US01---------
+    
+    #---------US03---------
+    if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
+        print "ERROR: The death date is before birth date for " , individual["NAME"]
+    #---------US03---------
 
 for family in families:
     husbandID = ""
@@ -137,11 +161,6 @@ for family in families:
         if isDateBeforeOrEqual(weddingDate,wifeBirthDay):
             print "ERROR: The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
-    
-    #---------US03---------
-    if birthDate != "" and deathDate != "" and isDateBeforeOrEqual(deathDate,birthDate):
-        print "ERROR: The Death date is before Birth date for " , individuals[individual]["NAME"]
-    #---------US03---------
 
     #---------US04---------
     if weddingDate != "" and divorceDate != "" and isDateBeforeOrEqual(divorceDate,weddingDate):
@@ -152,8 +171,16 @@ for family in families:
     if husbandID and wifeID and weddingDate:
         husbanddeathDay = individuals[husbandID]["DEAT"]
         wifedeathDay = individuals[wifeID]["DEAT"]
-    if isDateBeforeOrEqual(husbanddeathDay, weddingDate):
-        print "ERROR: The wedding date is after the death of ", individuals[husbandID]["NAME"]
-    if isDateBeforeOrEqual(wifedeathDay, weddingDate):
-        print "ERROR: The wedding date is after the death of ", individuals[wifeID]["NAME"]
+        if isDateBeforeOrEqual(husbanddeathDay, weddingDate):
+            print "ERROR: The wedding date is after the death of ", individuals[husbandID]["NAME"]
+        if isDateBeforeOrEqual(wifedeathDay, weddingDate):
+            print "ERROR: The wedding date is after the death of ", individuals[wifeID]["NAME"]
     #---------US05-----------
+
+    #---------US06---------
+    if husbandID and wifeID and divorceDate:
+        if individuals[husbandID].has_key("DEAT") and isDateBeforeOrEqual(individuals[husbandID]['DEAT'], divorceDate):
+            print "ERROR: The divorce date is after the death of ", individuals[husbandID]["NAME"]
+        if individuals[wifeID].has_key("DEAT") and isDateBeforeOrEqual(individuals[wifeID]['DEAT'], divorceDate):
+            print "ERROR: The divorce date is after the death of ", individuals[wifeID]["NAME"]
+    #---------US06---------
