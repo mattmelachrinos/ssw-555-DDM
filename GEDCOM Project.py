@@ -14,15 +14,17 @@ except:
     print 'That is an incorrect file name.'
     sys.exit()
     
-currentDate = time.strftime("%d %b %Y") # 19 JAN 2007
+currentDate = time.strftime("%d %b %Y") # Ex: 19 JAN 2007
 
 def isDateBeforeOrEqual(date1,date2):
     months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 
+    # Parse first date
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
     date1date = date1[:-9]
 
+    # Parse second date
     date2year = int(date2[-4:])
     date2month = date2[-8:-5].upper()
     date2date = int(date2[:-9])
@@ -125,6 +127,8 @@ for individual_id in individuals:
     individual = individuals[individual_id]
     
     #---------US01---------
+    # Dates before current date
+    # Dates (birth, marriage, divorce, death) should not be after the current date
     if individual.has_key('BIRT') and isDateBeforeOrEqual(currentDate, individual['BIRT']):
         print "ERROR: The birth date is after current date for " , individual["NAME"]
     if individual.has_key('DEAT') and isDateBeforeOrEqual(currentDate, individual['DEAT']):
@@ -132,6 +136,8 @@ for individual_id in individuals:
     #---------US01---------
     
     #---------US03---------
+    # Birth before death
+    # Birth should occur before death of an individual
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
         print "ERROR: The death date is before birth date for " , individual["NAME"]
     #---------US03---------
@@ -142,6 +148,8 @@ for family in families:
     weddingDate = ""
     divorceDate = ""
 
+    # Since the family data is stored as fam = [['HUSB', ID], ['WIFE', ID], etc] to account for multiple children, 
+    # this loop can extract some information for quicker use
     for item in families[family]:
         if item[0] == "HUSB":
             husbandID = item[1]
@@ -153,6 +161,8 @@ for family in families:
             divorceDate = item[1]
             
     #---------US02---------
+    # Birth before marriage
+    # Birth should occur before marriage of an individual
     if husbandID and wifeID and weddingDate:
         husbandBirthDay = individuals[husbandID]["BIRT"]
         wifeBirthDay = individuals[wifeID]["BIRT"]
@@ -163,11 +173,15 @@ for family in families:
     #---------US02---------
 
     #---------US04---------
+    # Marriage before divorce
+    # Marriage should occur before divorce of spouses, and divorce can only occur after marriage
     if weddingDate != "" and divorceDate != "" and isDateBeforeOrEqual(divorceDate,weddingDate):
         print "ERROR: Divorce date before Wedding date for " , individuals[husbandID]["NAME"], " and " , individuals[wifeID]["NAME"]
     #---------US04---------
 
     #---------US05---------
+    # Marriage before death
+    # Marriage should occur before death of either spouse
     if husbandID and wifeID and weddingDate:
         husbanddeathDay = individuals[husbandID]["DEAT"]
         wifedeathDay = individuals[wifeID]["DEAT"]
@@ -178,6 +192,8 @@ for family in families:
     #---------US05-----------
 
     #---------US06---------
+    # Divorce before death
+    # Divorce can only occur before death of both spouses
     if husbandID and wifeID and divorceDate:
         if individuals[husbandID].has_key("DEAT") and isDateBeforeOrEqual(individuals[husbandID]['DEAT'], divorceDate):
             print "ERROR: The divorce date is after the death of ", individuals[husbandID]["NAME"]
