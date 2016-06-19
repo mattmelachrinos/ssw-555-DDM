@@ -64,9 +64,6 @@ id_num = ''
 # Keeps track of the dates
 date_type = ''
 
-# The dictionary of valid family tags
-family_tags = {"HUSB": "Husband", "WIFE": "Wife", "CHIL": "Child"}
-
 # Loop through all the lines in the GEDCOM file
 for line in file:
     line = line.lstrip().rstrip()
@@ -81,7 +78,8 @@ for line in file:
         if(id_type == 'INDI'):
             individuals[id_num] = {}
         else:
-            families[id_num] = []
+            families[id_num] = {}
+            families[id_num]['CHIL'] = []
     # Ensure that the tag is valid
     elif int(parts[0]) < 3 and parts[1] in tags[int(parts[0])]:
         # Add a tag to the family or individual
@@ -89,7 +87,10 @@ for line in file:
             if id_type == 'INDI':
                 individuals[id_num][parts[1]] = ' '.join(parts[2:])
             if id_type == 'FAM':
-                families[id_num] += [[parts[1], parts[2]]]
+                if parts[1] == "CHIL":
+                    families[id_num]['CHIL'] += [' '.join(parts[2:])]
+                else:
+                    families[id_num][parts[1]] = ' '.join(parts[2:])
         # Prepare to add a date tag
         if parts[0] == '1' and parts[1] in ["BIRT", "DEAT", "MARR", "DIV"]:
             date_type = parts[1]
@@ -100,24 +101,26 @@ for line in file:
                 individuals[id_num][date_type] = ' '.join(parts[2:])
             # MARR and DIV belong to a family
             elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
-                families[id_num] += [[date_type, ' '.join(parts[2:])]]
+                families[id_num][date_type] = ' '.join(parts[2:])
 
 
 print "\nIndividuals:"
 print "***************\n"
-for individual in sorted(individuals.keys()):
-    print "Individual ID:", individual
-    print "Name:", individuals[individual]["NAME"]
-    if individuals[individual].has_key('BIRT'):
-        print "Birth:", individuals[individual]["BIRT"],"\n"
+for individual_id in sorted(individuals.keys()):
+    print "Individual ID:", individual_id
+    print "Name:", individuals[individual_id]["NAME"]
+    if individuals[individual_id].has_key('BIRT'):
+        print "Birth:", individuals[individual_id]["BIRT"],"\n"
 
 print "\nFamilies:"
 print "************\n"
-for family in sorted(families.keys()):
-    print "Family ID:", family
-    for member in families[family]:
-        if member[0] in family_tags:
-            print family_tags[member[0]] + ": " + individuals[member[1]]['NAME']
+for family_id in sorted(families.keys()):
+    print "Family ID:", family_id
+    for member in [["HUSB", "Husband"], ["WIFE", "Wife"]]:
+        if families[family_id].has_key(member[0]):
+            print member[1] + ": " + individuals[families[family_id][member[0]]]['NAME']
+    for child_id in families[family_id]['CHIL']:
+        print 'Child' + ": " + individuals[child_id]['NAME']
     print ""
 
 
@@ -141,24 +144,18 @@ for individual_id in individuals:
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
         print "ERROR: The death date is before birth date for " , individual["NAME"]
     #---------US03---------
-
-for family in families:
+    
+for family_id in families:
+    family = families[family_id]
+    
     husbandID = ""
     wifeID = ""
     weddingDate = ""
     divorceDate = ""
-
-    # Since the family data is stored as fam = [['HUSB', ID], ['WIFE', ID], etc] to account for multiple children, 
-    # this loop can extract some information for quicker use
-    for item in families[family]:
-        if item[0] == "HUSB":
-            husbandID = item[1]
-        if item[0] == "WIFE":
-            wifeID = item[1]
-        if item[0] == "MARR":
-            weddingDate = item[1]
-        if item[0] == "DIV":
-            divorceDate = item[1]
+    if family.has_key('HUSB'): husbandID = family['HUSB']
+    if family.has_key('WIFE'): wifeID = family['WIFE']
+    if family.has_key('MARR'): weddingDate = family['MARR']
+    if family.has_key('DIV'): divorceDate = family['DIV']
             
     #---------US02---------
     # Birth before marriage
