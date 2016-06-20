@@ -161,11 +161,9 @@ for family_id in families:
     # Birth before marriage
     # Birth should occur before marriage of an individual
     if husbandID and wifeID and weddingDate:
-        husbandBirthDay = individuals[husbandID]["BIRT"]
-        wifeBirthDay = individuals[wifeID]["BIRT"]
-        if isDateBeforeOrEqual(weddingDate,husbandBirthDay):
+        if individuals[husbandID].has_key("BIRT") and isDateBeforeOrEqual(individuals[husbandID]['BIRT'], weddingDate):
             print "ERROR: The wedding date is before the birth of ", individuals[husbandID]["NAME"]
-        if isDateBeforeOrEqual(weddingDate,wifeBirthDay):
+        if individuals[wifeID].has_key("BIRT") and isDateBeforeOrEqual(individuals[wifeID]['BIRT'], weddingDate):
             print "ERROR: The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
 
