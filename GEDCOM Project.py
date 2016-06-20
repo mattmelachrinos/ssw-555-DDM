@@ -180,11 +180,9 @@ for family_id in families:
     # Marriage before death
     # Marriage should occur before death of either spouse
     if husbandID and wifeID and weddingDate:
-        husbanddeathDay = individuals[husbandID]["DEAT"]
-        wifedeathDay = individuals[wifeID]["DEAT"]
-        if isDateBeforeOrEqual(husbanddeathDay, weddingDate):
+        if individuals[husbandID].has_key("DEAT") and isDateBeforeOrEqual(individuals[husbandID]['DEAT'], weddingDate):
             print "ERROR: The wedding date is after the death of ", individuals[husbandID]["NAME"]
-        if isDateBeforeOrEqual(wifedeathDay, weddingDate):
+        if individuals[wifeID].has_key("DEAT") and isDateBeforeOrEqual(individuals[wifeID]['DEAT'], weddingDate):
             print "ERROR: The wedding date is after the death of ", individuals[wifeID]["NAME"]
     #---------US05-----------
 
