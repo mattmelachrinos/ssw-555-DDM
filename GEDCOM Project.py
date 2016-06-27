@@ -13,7 +13,7 @@ try:
 except:
     print 'That is an incorrect file name.'
     sys.exit()
-    
+
 currentDate = time.strftime("%d %b %Y") # Ex: 19 JAN 2007
 
 def isDateBeforeOrEqual(date1,date2):
@@ -22,7 +22,7 @@ def isDateBeforeOrEqual(date1,date2):
     # Parse first date
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
-    date1date = date1[:-9]
+    date1date = int(date1[:-9])
 
     # Parse second date
     date2year = int(date2[-4:])
@@ -73,7 +73,7 @@ for line in file:
     if len(parts) == 3 and parts[0] == '0' and parts[2] in ["FAM","INDI"]:
         id_type = parts[2]
         id_num = parts[1]
-        
+
         # Initiate the object for the new family or individual
         if(id_type == 'INDI'):
             individuals[id_num] = {}
@@ -128,7 +128,7 @@ for family_id in sorted(families.keys()):
 
 for individual_id in individuals:
     individual = individuals[individual_id]
-    
+
     #---------US01---------
     # Dates before current date
     # Dates (birth, marriage, divorce, death) should not be after the current date
@@ -137,17 +137,17 @@ for individual_id in individuals:
     if individual.has_key('DEAT') and isDateBeforeOrEqual(currentDate, individual['DEAT']):
         print "ERROR: The death date is after current date for " , individual["NAME"]
     #---------US01---------
-    
+
     #---------US03---------
     # Birth before death
     # Birth should occur before death of an individual
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
         print "ERROR: The death date is before birth date for " , individual["NAME"]
     #---------US03---------
-    
+
 for family_id in families:
     family = families[family_id]
-    
+
     husbandID = ""
     wifeID = ""
     weddingDate = ""
@@ -156,7 +156,7 @@ for family_id in families:
     if family.has_key('WIFE'): wifeID = family['WIFE']
     if family.has_key('MARR'): weddingDate = family['MARR']
     if family.has_key('DIV'): divorceDate = family['DIV']
-            
+
     #---------US02---------
     # Birth before marriage
     # Birth should occur before marriage of an individual
