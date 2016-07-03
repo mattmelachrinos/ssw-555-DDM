@@ -175,6 +175,18 @@ for family_id in families:
         if individuals[wifeID].has_key("BIRT") and isDateBeforeOrEqual(individuals[wifeID]['BIRT'], weddingDate):
             print "ERROR (Fam " + family_id + "): The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
+    
+    #---------US09---------
+    # Birth before death of parents
+    # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before birth)
+    for child_id in family['CHIL']:
+        if husbandID and individuals[husbandID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
+            if isDateBeforeOrEqual(individuals[husbandID]['DEAT'],individuals[child_id]['BIRT']):
+            print "ANOMALY: ", individuals[husbandID]["NAME"] , " died prior to his child's birth."
+        if wifeID and individuals[wifeID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
+            if isDateBeforeOrEqual(individuals[wifeID]['DEAT'],individuals[child_id]['BIRT']):
+            print "ERROR: ", individuals[wifeID]["NAME"] , " died prior to her child's birth."
+    #---------US09--------- 
 
     #---------US04---------
     # Marriage before divorce
