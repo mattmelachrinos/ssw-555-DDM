@@ -101,7 +101,7 @@ for line in file:
             # MARR and DIV belong to a family
             elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
                 families[id_num][date_type] = ' '.join(parts[2:])
-            
+
             date_type = ''
 
 
@@ -146,13 +146,13 @@ for individual_id in individuals:
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
         print "ERROR: The death date is before birth date for " , individual["NAME"]
     #---------US03---------
-    
+
     #---------US07---------
     # Age over 150 years old
     # Death minus Birth should be less than 150 years
     if individual.has_key('BIRT') and individual.has_key('DEAT') and (individual['DEAT'] - individual['BIRT']>= 150):
         print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
-    #---------US07---------  
+    #---------US07---------
 
 for family_id in families:
     family = families[family_id]
@@ -175,18 +175,18 @@ for family_id in families:
         if individuals[wifeID].has_key("BIRT") and isDateBeforeOrEqual(individuals[wifeID]['BIRT'], weddingDate):
             print "ERROR (Fam " + family_id + "): The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
-    
+
     #---------US09---------
     # Birth before death of parents
     # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before the birth of a child)
     for child_id in family['CHIL']:
         if husbandID and individuals[husbandID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['DEAT'],individuals[child_id]['BIRT']):
-            print "ANOMALY: ", individuals[husbandID]["NAME"] , " died prior to his child's birth."
+                print "ANOMALY: ", individuals[husbandID]["NAME"] , " died prior to his child's birth."
         if wifeID and individuals[wifeID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['DEAT'],individuals[child_id]['BIRT']):
-            print "ERROR: ", individuals[wifeID]["NAME"] , " died prior to her child's birth."
-    #---------US09--------- 
+                print "ERROR: ", individuals[wifeID]["NAME"] , " died prior to her child's birth."
+    #---------US09---------
 
     #---------US04---------
     # Marriage before divorce
