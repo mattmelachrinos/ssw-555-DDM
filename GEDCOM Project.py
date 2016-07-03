@@ -146,6 +146,13 @@ for individual_id in individuals:
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
         print "ERROR: The death date is before birth date for " , individual["NAME"]
     #---------US03---------
+    
+    #---------US07---------
+    # Age over 150 years old
+    # Death minus Birth should be less than 150 years
+    if individual.has_key('BIRT') and individual.has_key('DEAT') and (individual['DEAT'] - individual['BIRT']>= 150):
+        print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
+    #---------US07---------  
 
 for family_id in families:
     family = families[family_id]
