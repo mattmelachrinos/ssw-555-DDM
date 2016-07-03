@@ -209,10 +209,10 @@ for family_id in families:
     for child_id in family['CHIL']:
         if wifeID and individuals[wifeID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['BIRT'], individuals[child_id]['BIRT'], 60):
-                print "ERROR (Fam " + family_id + "): The mother is more than 60 years older than", individuals[child_id]["NAME"]
+                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than", individuals[child_id]["NAME"]
         if husbandID and individuals[husbandID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['BIRT'], individuals[child_id]['BIRT'], 80):
-                print "ERROR (Fam " + family_id + "): The father is more than 80 years older than", individuals[child_id]["NAME"]
+                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than", individuals[child_id]["NAME"]
     #---------US12---------
 
     #---------US21---------
