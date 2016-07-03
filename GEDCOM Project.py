@@ -178,7 +178,7 @@ for family_id in families:
     
     #---------US09---------
     # Birth before death of parents
-    # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before birth)
+    # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before the birth of a child)
     for child_id in family['CHIL']:
         if husbandID and individuals[husbandID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['DEAT'],individuals[child_id]['BIRT']):
