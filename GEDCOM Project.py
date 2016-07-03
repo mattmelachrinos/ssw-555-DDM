@@ -177,17 +177,27 @@ for family_id in families:
             print "ERROR (Fam " + family_id + "): The wedding date is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
 
-    #---------US09---------
-    # Birth before death of parents
-    # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before the birth of a child)
+
     for child_id in family['CHIL']:
+        #---------US09---------
+        # Birth before death of parents
+        # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before the birth of a child)
         if husbandID and individuals[husbandID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['DEAT'],individuals[child_id]['BIRT']):
                 print "ANOMALY: ", individuals[husbandID]["NAME"] , " died prior to his child's birth."
         if wifeID and individuals[wifeID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['DEAT'],individuals[child_id]['BIRT']):
                 print "ERROR: ", individuals[wifeID]["NAME"] , " died prior to her child's birth."
-    #---------US09---------
+        #---------US09---------
+
+        #---------US08---------
+        # Birth during parents marriage
+        # Birth should occur after parents are married and before they are divorced
+        if weddingDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(individuals[child_id]["BIRT"],weddingDate):
+            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born before parents were married."
+        if divorceDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(divorceDate,individuals[child_id]["BIRT"]):
+            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced."
+        #---------US08---------
 
     #---------US04---------
     # Marriage before divorce
