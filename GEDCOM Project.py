@@ -3,6 +3,7 @@
 
 import sys  # graceful exit
 import time # current date
+from datetime import date # differences in date
 
 # open and read GEDCOM file
 fname = raw_input('Please enter the file name: ')
@@ -43,6 +44,24 @@ def isDateBeforeOrEqual(date1,date2,diffYear=0):
                 return True
         return False
     return False
+
+def differenceInDate(date1,date2):
+    months = ["JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12]
+
+    # Parse first date
+    date1year = int(date1[-4:])
+    date1month = date1[-8:-5].upper()
+    date1date = int(date1[:-9])
+    d1 = date(date1year,months[date1month],date1date)
+
+    # Parse second date
+    date2year = int(date2[-4:])
+    date2month = date2[-8:-5].upper()
+    date2date = int(date2[:-9])
+    d2 = date(date2year,months[date2month],date2date)
+
+    difference = d2-d1
+    return difference.days
 
 # All the valid tags
 zero_tags = ["HEAD", "TRLR", "NOTE"]
