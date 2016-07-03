@@ -150,8 +150,9 @@ for individual_id in individuals:
     #---------US07---------
     # Age over 150 years old
     # Death minus Birth should be less than 150 years
-    if individual.has_key('BIRT') and individual.has_key('DEAT') and (individual['DEAT'] - individual['BIRT']>= 150):
-        print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
+    if individual.has_key('BIRT') and individual.has_key('DEAT'):
+        if isDateBeforeOrEqual(individuals['BIRT'], individuals['DEAT'], 150):
+            print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
     #---------US07---------
 
 for family_id in families:
