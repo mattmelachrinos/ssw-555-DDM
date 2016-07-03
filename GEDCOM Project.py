@@ -16,11 +16,11 @@ except:
 
 currentDate = time.strftime("%d %b %Y") # Ex: 19 JAN 2007
 
-def isDateBeforeOrEqual(date1,date2):
+def isDateBeforeOrEqual(date1,date2,diffYear=0):
     months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 
     # Parse first date
-    date1year = int(date1[-4:])
+    date1year = int(date1[-4:]) + diffYear
     date1month = date1[-8:-5].upper()
     date1date = int(date1[:-9])
 
@@ -102,6 +102,8 @@ for line in file:
             # MARR and DIV belong to a family
             elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
                 families[id_num][date_type] = ' '.join(parts[2:])
+            
+            date_type = ''
 
 
 print "\nIndividuals:"
@@ -110,7 +112,8 @@ for individual_id in sorted(individuals.keys()):
     print "Individual ID:", individual_id
     print "Name:", individuals[individual_id]["NAME"]
     if individuals[individual_id].has_key('BIRT'):
-        print "Birth:", individuals[individual_id]["BIRT"],"\n"
+        print "Birth:", individuals[individual_id]["BIRT"]
+    print ""
 
 print "\nFamilies:"
 print "************\n"
@@ -193,3 +196,24 @@ for family_id in families:
         if individuals[wifeID].has_key("DEAT") and isDateBeforeOrEqual(individuals[wifeID]['DEAT'], divorceDate):
             print "ERROR: The divorce date is after the death of ", individuals[wifeID]["NAME"]
     #---------US06---------
+
+    #---------US12---------
+    # Parents not too old
+    # Mother should be less than 60 years older than her children and father should be less than 80 years older than his children
+    for child_id in family['CHIL']:
+        if wifeID and individuals[wifeID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
+            if isDateBeforeOrEqual(individuals[wifeID]['BIRT'], individuals[child_id]['BIRT'], 60):
+                print "ERROR: The mother is more than 60 years older than", individuals[child_id]["NAME"]
+        if husbandID and individuals[husbandID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
+            if isDateBeforeOrEqual(individuals[husbandID]['BIRT'], individuals[child_id]['BIRT'], 80):
+                print "ERROR: The father is more than 80 years older than", individuals[child_id]["NAME"]
+    #---------US12---------
+
+    #---------US21---------
+    # Correct gender for role
+    # Husband in family should be male and wife in family should be female
+    if wifeID and individuals[wifeID].has_key("SEX") and individuals[wifeID]["SEX"] != "F":
+        print "ERROR: The wife, " + individuals[wifeID]["NAME"] + ", should be female"
+    if husbandID and individuals[husbandID].has_key("SEX") and individuals[husbandID]["SEX"] != "M":
+        print "ERROR: The husband, " + individuals[husbandID]["NAME"] + ", should be male"
+    #---------US21---------
