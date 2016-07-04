@@ -46,7 +46,7 @@ def isDateBeforeOrEqual(date1,date2,diffYear=0):
     return False
 
 def differenceInDate(date1,date2):
-    months = ["JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12]
+    months = {"JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12}
 
     # Parse first date
     date1year = int(date1[-4:])
@@ -170,7 +170,7 @@ for individual_id in individuals:
     # Age over 150 years old
     # Death minus Birth should be less than 150 years
     if individual.has_key('BIRT') and individual.has_key('DEAT'):
-        if isDateBeforeOrEqual(individuals['BIRT'], individuals['DEAT'], 150):
+        if isDateBeforeOrEqual(individual['BIRT'], individual['DEAT'], 150):
             print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
     #---------US07---------
 
@@ -181,6 +181,7 @@ for family_id in families:
     wifeID = ""
     weddingDate = ""
     divorceDate = ""
+    kidDict = {}
     if family.has_key('HUSB'): husbandID = family['HUSB']
     if family.has_key('WIFE'): wifeID = family['WIFE']
     if family.has_key('MARR'): weddingDate = family['MARR']
@@ -217,6 +218,20 @@ for family_id in families:
         if divorceDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(divorceDate,individuals[child_id]["BIRT"]):
             print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced."
         #---------US08---------
+
+    #---------US13---------
+    # Sibling spacing
+    # makes sure the children are spaced less than 2 days or more than 280
+    # note: starts in child loop ends outside of it. Yes this is ugly
+        if individuals[child_id].has_key("BIRT"):
+            kidDict[individuals[child_id]["BIRT"]] = child_id
+
+    for date1 in kidDict:
+        for date2 in kidDict:
+            if differenceInDate(date1,date2) > 3 and differenceInDate(date1,date2) < 280:
+                print "ERROR: ", individuals[kidDict[date1]]["NAME"], " and ", individuals[kidDict[date1]]["NAME"], " are not twins and are born less than 9 months apart."
+
+    #---------US13---------
 
     #---------US04---------
     # Marriage before divorce
