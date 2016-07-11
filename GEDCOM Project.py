@@ -131,6 +131,8 @@ for individual_id in sorted(individuals.keys()):
     print "Name:", individuals[individual_id]["NAME"]
     if individuals[individual_id].has_key('BIRT'):
         print "Birth:", individuals[individual_id]["BIRT"]
+    if individuals[individual_id].has_key("SEX"):
+        print "Sex:", individuals[individual_id]["SEX"]
     print ""
 
 print "\nFamilies:"
