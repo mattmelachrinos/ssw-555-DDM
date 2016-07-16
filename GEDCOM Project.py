@@ -156,16 +156,16 @@ for individual_id in individuals:
     # Dates before current date
     # Dates (birth, marriage, divorce, death) should not be after the current date
     if individual.has_key('BIRT') and isDateBeforeOrEqual(currentDate, individual['BIRT']):
-        print "ERROR: The birth date is after current date for " , individual["NAME"]
+        print "ERROR: The birth date (" + individual['BIRT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"]
     if individual.has_key('DEAT') and isDateBeforeOrEqual(currentDate, individual['DEAT']):
-        print "ERROR: The death date is after current date for " , individual["NAME"]
+        print "ERROR: The death date (" + individual['DEAT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"]
     #---------US01---------
 
     #---------US03---------
     # Birth before death
     # Birth should occur before death of an individual
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
-        print "ERROR: The death date is before birth date for " , individual["NAME"]
+        print "ERROR: The death date (" + individual['DEAT'] + ") is before birth date (" + individual['BIRT'] + ") for " , individual["NAME"]
     #---------US03---------
 
     #---------US07---------
