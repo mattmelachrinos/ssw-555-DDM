@@ -197,9 +197,9 @@ for family_id in families:
     # Birth should occur before marriage of an individual
     if husbandID and wifeID and weddingDate:
         if individuals[husbandID].has_key("BIRT") and isDateBeforeOrEqual(individuals[husbandID]['BIRT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date is before the birth of ", individuals[husbandID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[husbandID]["NAME"]
         if individuals[wifeID].has_key("BIRT") and isDateBeforeOrEqual(individuals[wifeID]['BIRT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date is before the birth of ", individuals[wifeID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[wifeID]["NAME"]
     #---------US02---------
 
 
@@ -209,19 +209,19 @@ for family_id in families:
         # Birth should occur before death a parent. Anomaly (Unusual circumstances could create the death of a parent before the birth of a child)
         if husbandID and individuals[husbandID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['DEAT'],individuals[child_id]['BIRT']):
-                print "ANOMALY: ", individuals[husbandID]["NAME"] , " died prior to his child's birth."
+                print "ANOMALY: ", individuals[husbandID]["NAME"] , " died on (" + individuals[husbandID]['DEAT'] + ") prior to his child's birth."
         if wifeID and individuals[wifeID].has_key("DEAT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['DEAT'],individuals[child_id]['BIRT']):
-                print "ERROR: ", individuals[wifeID]["NAME"] , " died prior to her child's birth."
+                print "ERROR: ", individuals[wifeID]["NAME"] , " died on (" + individuals[wifeID]['DEAT'] + ") prior to her child's birth."
         #---------US09---------
 
         #---------US08---------
         # Birth during parents marriage
         # Birth should occur after parents are married and before they are divorced
         if weddingDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(individuals[child_id]["BIRT"],weddingDate):
-            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born before parents were married."
+            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born before parents were married on (" + weddingDate + ")."
         if divorceDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(divorceDate,individuals[child_id]["BIRT"]):
-            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced."
+            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced on (" + divorceDate + ").""
         #---------US08---------
 
     #---------US13---------
@@ -262,7 +262,7 @@ for family_id in families:
     # Marriage before divorce
     # Marriage should occur before divorce of spouses, and divorce can only occur after marriage
     if weddingDate != "" and divorceDate != "" and isDateBeforeOrEqual(divorceDate,weddingDate):
-        print "ERROR (Fam " + family_id + "): Divorce date before Wedding date for " , individuals[husbandID]["NAME"], " and " , individuals[wifeID]["NAME"]
+        print "ERROR (Fam " + family_id + "): Divorce date (" + divorceDate + ") is before Wedding date (" + weddingDate + ") for " , individuals[husbandID]["NAME"], " and " , individuals[wifeID]["NAME"] + "."
     #---------US04---------
 
     #---------US05---------
@@ -270,9 +270,9 @@ for family_id in families:
     # Marriage should occur before death of either spouse
     if husbandID and wifeID and weddingDate:
         if individuals[husbandID].has_key("DEAT") and isDateBeforeOrEqual(individuals[husbandID]['DEAT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date is after the death of ", individuals[husbandID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is after the death (" + individuals[husbandID]['DEAT'] + ") of ", individuals[husbandID]["NAME"] + "."
         if individuals[wifeID].has_key("DEAT") and isDateBeforeOrEqual(individuals[wifeID]['DEAT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date is after the death of ", individuals[wifeID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is after the death (" + individuals[husbandID]['DEAT'] + ") of ", individuals[wifeID]["NAME"] + "."
     #---------US05-----------
 
     #---------US06---------
