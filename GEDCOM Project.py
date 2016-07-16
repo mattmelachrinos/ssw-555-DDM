@@ -247,6 +247,16 @@ for family_id in families:
         if individuals[wifeID].has_key("BIRT") and differenceInDate(weddingDate,individuals[wife]['BIRT']) < 14:
             print "ANOMALY (Fam " + family_id + "): The marriage of " + individuals[wifeID]["NAME"] + " took place before she was 14 years old."
     #---------US10---------
+    
+    #---------US34---------
+    # List large age differences
+    # The older spouse was more than twice as old as the younger spouse
+    if husbandID and wifeID and weddingDate:
+        AgeofHusband = differenceInDate(weddingDate,individuals[husbandID]['BIRT'])
+        AgeofWife = differeceInDate(weddingDate,individuals[wifeID]['BIRT'])
+        if AgeofHusband > 2 * AgeofWife or AgeofWife > 2 * AgeofHusband:
+            print "ANOMALY (Fam " + family_id + "): There is a large age difference between " + individuals[husbandID]['NAME'] + " and " + individuals[wifeID]['NAME'] + "."
+    #---------US34---------      
 
     #---------US04---------
     # Marriage before divorce
