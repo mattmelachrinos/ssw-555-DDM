@@ -291,17 +291,17 @@ for family_id in families:
     for child_id in family['CHIL']:
         if wifeID and individuals[wifeID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['BIRT'], individuals[child_id]['BIRT'], 60):
-                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than ", individuals[child_id]["NAME"] + "."
+                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than her child, " individuals[child_id]["NAME"] + "."
         if husbandID and individuals[husbandID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['BIRT'], individuals[child_id]['BIRT'], 80):
-                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than ", individuals[child_id]["NAME"] + "."
+                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than his child, " individuals[child_id]["NAME"] + "."
     #---------US12---------
 
     #---------US21---------
     # Correct gender for role
     # Husband in family should be male and wife in family should be female
     if wifeID and individuals[wifeID].has_key("SEX") and individuals[wifeID]["SEX"] != "F":
-        print "ERROR (Fam " + family_id + "): The wife , " + individuals[wifeID]["NAME"] + ", should be female" + "."
+        print "ERROR (Fam " + family_id + "): The wife, " + individuals[wifeID]["NAME"] + ", should be female" + "."
     if husbandID and individuals[husbandID].has_key("SEX") and individuals[husbandID]["SEX"] != "M":
-        print "ERROR (Fam " + family_id + "): The husband , " + individuals[husbandID]["NAME"] + ", should be male" + "."
+        print "ERROR (Fam " + family_id + "): The husband, " + individuals[husbandID]["NAME"] + ", should be male" + "."
     #---------US21---------
