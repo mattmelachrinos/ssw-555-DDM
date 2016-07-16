@@ -156,16 +156,16 @@ for individual_id in individuals:
     # Dates before current date
     # Dates (birth, marriage, divorce, death) should not be after the current date
     if individual.has_key('BIRT') and isDateBeforeOrEqual(currentDate, individual['BIRT']):
-        print "ERROR: The birth date (" + individual['BIRT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"]
+        print "ERROR: The birth date (" + individual['BIRT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"] + "."
     if individual.has_key('DEAT') and isDateBeforeOrEqual(currentDate, individual['DEAT']):
-        print "ERROR: The death date (" + individual['DEAT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"]
+        print "ERROR: The death date (" + individual['DEAT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"] + "."
     #---------US01---------
 
     #---------US03---------
     # Birth before death
     # Birth should occur before death of an individual
     if individual.has_key('BIRT') and individual.has_key('DEAT') and isDateBeforeOrEqual(individual['DEAT'], individual['BIRT']):
-        print "ERROR: The death date (" + individual['DEAT'] + ") is before birth date (" + individual['BIRT'] + ") for " , individual["NAME"]
+        print "ERROR: The death date (" + individual['DEAT'] + ") is before birth date (" + individual['BIRT'] + ") for " , individual["NAME"] + "."
     #---------US03---------
 
     #---------US07---------
@@ -197,9 +197,9 @@ for family_id in families:
     # Birth should occur before marriage of an individual
     if husbandID and wifeID and weddingDate:
         if individuals[husbandID].has_key("BIRT") and isDateBeforeOrEqual(individuals[husbandID]['BIRT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[husbandID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[husbandID]["NAME"] + "."
         if individuals[wifeID].has_key("BIRT") and isDateBeforeOrEqual(individuals[wifeID]['BIRT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[wifeID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[wifeID]["NAME"] + "."
     #---------US02---------
 
 
@@ -221,7 +221,7 @@ for family_id in families:
         if weddingDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(individuals[child_id]["BIRT"],weddingDate):
             print "ANOMALY: ", individuals[child_id]["NAME"] , " was born before parents were married on (" + weddingDate + ")."
         if divorceDate != "" and individuals[child_id].has_key("BIRT") and isDateBeforeOrEqual(divorceDate,individuals[child_id]["BIRT"]):
-            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced on (" + divorceDate + ").""
+            print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced on (" + divorceDate + ")."
         #---------US08---------
 
     #---------US13---------
@@ -272,7 +272,7 @@ for family_id in families:
         if individuals[husbandID].has_key("DEAT") and isDateBeforeOrEqual(individuals[husbandID]['DEAT'], weddingDate):
             print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is after the death (" + individuals[husbandID]['DEAT'] + ") of ", individuals[husbandID]["NAME"] + "."
         if individuals[wifeID].has_key("DEAT") and isDateBeforeOrEqual(individuals[wifeID]['DEAT'], weddingDate):
-            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is after the death (" + individuals[husbandID]['DEAT'] + ") of ", individuals[wifeID]["NAME"] + "."
+            print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is after the death (" + individuals[wifeID]['DEAT'] + ") of ", individuals[wifeID]["NAME"] + "."
     #---------US05-----------
 
     #---------US06---------
@@ -280,9 +280,9 @@ for family_id in families:
     # Divorce can only occur before death of both spouses
     if husbandID and wifeID and divorceDate:
         if individuals[husbandID].has_key("DEAT") and isDateBeforeOrEqual(individuals[husbandID]['DEAT'], divorceDate):
-            print "ERROR (Fam " + family_id + "): The divorce date is after the death of ", individuals[husbandID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The divorce date (" + divorceDate + ") is after the death (" + individuals[husbandID]['DEAT'] + ") of ", individuals[husbandID]["NAME"] + "."
         if individuals[wifeID].has_key("DEAT") and isDateBeforeOrEqual(individuals[wifeID]['DEAT'], divorceDate):
-            print "ERROR (Fam " + family_id + "): The divorce date is after the death of ", individuals[wifeID]["NAME"]
+            print "ERROR (Fam " + family_id + "): The divorce date (" + divorceDate + ") is after the death (" + individuals[wifeID]['DEAT'] + ")  of ", individuals[wifeID]["NAME"] + "."
     #---------US06---------
 
     #---------US12---------
@@ -291,17 +291,17 @@ for family_id in families:
     for child_id in family['CHIL']:
         if wifeID and individuals[wifeID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['BIRT'], individuals[child_id]['BIRT'], 60):
-                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than", individuals[child_id]["NAME"]
+                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than ", individuals[child_id]["NAME"] + "."
         if husbandID and individuals[husbandID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['BIRT'], individuals[child_id]['BIRT'], 80):
-                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than", individuals[child_id]["NAME"]
+                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than ", individuals[child_id]["NAME"] + "."
     #---------US12---------
 
     #---------US21---------
     # Correct gender for role
     # Husband in family should be male and wife in family should be female
     if wifeID and individuals[wifeID].has_key("SEX") and individuals[wifeID]["SEX"] != "F":
-        print "ERROR (Fam " + family_id + "): The wife, " + individuals[wifeID]["NAME"] + ", should be female"
+        print "ERROR (Fam " + family_id + "): The wife , " + individuals[wifeID]["NAME"] + ", should be female" + "."
     if husbandID and individuals[husbandID].has_key("SEX") and individuals[husbandID]["SEX"] != "M":
-        print "ERROR (Fam " + family_id + "): The husband, " + individuals[husbandID]["NAME"] + ", should be male"
+        print "ERROR (Fam " + family_id + "): The husband , " + individuals[husbandID]["NAME"] + ", should be male" + "."
     #---------US21---------
