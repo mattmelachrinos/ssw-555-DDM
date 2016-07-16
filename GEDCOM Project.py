@@ -175,7 +175,7 @@ for individual_id in individuals:
         if isDateBeforeOrEqual(individual['BIRT'], individual['DEAT'], 150):
             print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
     elif individual.has_key('BIRT'):
-        if isDateBeforeOrEqual(individual['BIRT'}, currentDate, 150):
+        if isDateBeforeOrEqual(individual['BIRT'] currentDate, 150):
              print "ANOMALY: " , individual["NAME"], " is older than 150 years." 
     #---------US07---------
 
