@@ -237,6 +237,16 @@ for family_id in families:
                 print "ERROR: ", individuals[kidDict[date1]]["NAME"], " and ", individuals[kidDict[date1]]["NAME"], " are not twins and are born less than 9 months apart."
 
     #---------US13---------
+    
+    #---------US10---------
+    # Marriage after 14
+    # Marriage should occur after the age of 14
+    if husbandID and wifeID and weddingDate:
+        if individuals[husbandID].has_key("BIRT") and differenceInDate(weddingDate,individuals[husbandID]['BIRT']) < 14:
+            print "ANOMALY (Fam " + family_id + "): The marriage of " + individuals[husbandID]["NAME"] + " took place before he was 14 years old."
+        if individuals[wifeID].has_key("BIRT") and differenceInDate(weddingDate,individuals[wife]['BIRT']) < 14:
+            print "ANOMALY (Fam " + family_id + "): The marriage of " + individuals[wifeID]["NAME"] + " took place before she was 14 years old."
+    #---------US10---------
 
     #---------US04---------
     # Marriage before divorce
