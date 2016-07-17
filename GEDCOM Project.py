@@ -46,22 +46,20 @@ def isDateBeforeOrEqual(date1,date2,diffYear=0):
     return False
 
 def differenceInDate(date1,date2):
-    months = {"JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12}
+    # Parse dates
+    d1 = stringToDate(date1)
+    d2 = stringToDate(date2)
 
-    # Parse first date
+    difference = d2 - d1
+    return difference.days
+    
+def stringToDate(date1):
+    months = {"JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12}
+    
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
     date1date = int(date1[:-9])
-    d1 = date(date1year,months[date1month],date1date)
-
-    # Parse second date
-    date2year = int(date2[-4:])
-    date2month = date2[-8:-5].upper()
-    date2date = int(date2[:-9])
-    d2 = date(date2year,months[date2month],date2date)
-
-    difference = d2-d1
-    return difference.days
+    return date(date1year,months[date1month],date1date)
 
 # All the valid tags
 zero_tags = ["HEAD", "TRLR", "NOTE"]
@@ -178,6 +176,9 @@ for individual_id in individuals:
         if isDateBeforeOrEqual(individual['BIRT'], currentDate, 150):
              print "ANOMALY: " , individual["NAME"], " is older than 150 years." 
     #---------US07---------
+    
+# Contains the families for each parent
+groupMarriagesByParent = {}
 
 for family_id in families:
     family = families[family_id]
@@ -187,8 +188,16 @@ for family_id in families:
     weddingDate = ""
     divorceDate = ""
     kidDict = {}
-    if family.has_key('HUSB'): husbandID = family['HUSB']
-    if family.has_key('WIFE'): wifeID = family['WIFE']
+    if family.has_key('HUSB'): 
+        husbandID = family['HUSB']
+        if not husbandID in groupMarriagesByParent:
+            groupMarriagesByParent[husbandID] = []
+        groupMarriagesByParent[husbandID] += [family_id]
+    if family.has_key('WIFE'): 
+        wifeID = family['WIFE']
+        if not wifeID in groupMarriagesByParent:
+            groupMarriagesByParent[wifeID] = []
+        groupMarriagesByParent[wifeID] += [family_id]
     if family.has_key('MARR'): weddingDate = family['MARR']
     if family.has_key('DIV'): divorceDate = family['DIV']
 
@@ -244,7 +253,7 @@ for family_id in families:
     if husbandID and wifeID and weddingDate:
         if individuals[husbandID].has_key("BIRT") and differenceInDate(weddingDate,individuals[husbandID]['BIRT']) < 14:
             print "ANOMALY (Fam " + family_id + "): The marriage of " + individuals[husbandID]["NAME"] + " took place before he was 14 years old."
-        if individuals[wifeID].has_key("BIRT") and differenceInDate(weddingDate,individuals[wife]['BIRT']) < 14:
+        if individuals[wifeID].has_key("BIRT") and differenceInDate(weddingDate,individuals[wifeID]['BIRT']) < 14:
             print "ANOMALY (Fam " + family_id + "): The marriage of " + individuals[wifeID]["NAME"] + " took place before she was 14 years old."
     #---------US10---------
     
@@ -253,7 +262,7 @@ for family_id in families:
     # The older spouse was more than twice as old as the younger spouse
     if husbandID and wifeID and weddingDate:
         AgeofHusband = differenceInDate(weddingDate,individuals[husbandID]['BIRT'])
-        AgeofWife = differeceInDate(weddingDate,individuals[wifeID]['BIRT'])
+        AgeofWife = differenceInDate(weddingDate,individuals[wifeID]['BIRT'])
         if AgeofHusband > 2 * AgeofWife or AgeofWife > 2 * AgeofHusband:
             print "ANOMALY (Fam " + family_id + "): There is a large age difference between " + individuals[husbandID]['NAME'] + " and " + individuals[wifeID]['NAME'] + "."
     #---------US34---------      
@@ -317,3 +326,15 @@ for family_id in families:
     if husbandID and individuals[husbandID].has_key("SEX") and individuals[husbandID]["SEX"] != "M":
         print "ERROR (Fam " + family_id + "): The husband, " + individuals[husbandID]["NAME"] + ", should be male" + "."
     #---------US21---------
+
+
+#---------US11---------
+# No bigamy
+# Marriage should not occur during marriage to another spouse
+for parent_id in groupMarriagesByParent:
+    family_group = filter(lambda fam: families[fam].has_key("MARR"),groupMarriagesByParent[parent_id])
+    if len(family_group) < 2: continue
+    def sortByMarr(family_id, family_id2):
+        return differenceInDate(families[family_id]['MARR'], families[family_id2]['MARR'])
+    print sorted(family_group, sortByMarr)
+#---------US11---------
