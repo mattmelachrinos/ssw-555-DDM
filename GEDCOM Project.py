@@ -17,33 +17,7 @@ except IOError:
 currentDate = time.strftime("%d %b %Y") # Ex: 19 JAN 2007
 
 def isDateBeforeOrEqual(date1,date2,diffYear=0):
-    months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
-
-    # Parse first date
-    date1year = int(date1[-4:]) + diffYear
-    date1month = date1[-8:-5].upper()
-    date1date = int(date1[:-9])
-
-    # Parse second date
-    date2year = int(date2[-4:])
-    date2month = date2[-8:-5].upper()
-    date2date = int(date2[:-9])
-
-    if date1year < date2year:
-        return True
-    elif date1year==date2year:
-        for item in months:
-            if date1month == item:
-                date1month = int(months.index(item))
-            if date2month == item:
-                date2month = int(months.index(item))
-        if date1month < date2month:
-            return True
-        elif date1month == date2month:
-            if date1date <= date2date:
-                return True
-        return False
-    return False
+    return (differenceInDate(date1, date2) - diffYear * 360) >= 0
 
 def differenceInDate(date1,date2):
     # Parse dates
