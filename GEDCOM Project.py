@@ -309,6 +309,11 @@ for parent_id in groupMarriagesByParent:
     family_group = filter(lambda fam: families[fam].has_key("MARR"),groupMarriagesByParent[parent_id])
     if len(family_group) < 2: continue
     def sortByMarr(family_id, family_id2):
-        return differenceInDate(families[family_id]['MARR'], families[family_id2]['MARR'])
-    print sorted(family_group, sortByMarr)
+        return differenceInDate(families[family_id2]['MARR'], families[family_id]['MARR'])
+    family_group = sorted(family_group, sortByMarr)
+
+    for i in range(len(family_group) - 1):
+        if families[family_group[i]].has_key('DIV'):
+            if isDateBeforeOrEqual(families[family_group[i]]['DIV'], families[family_group[i + 1]]['MARR']): continue
+        print "ANOMALY: The family " + family_group[i] + " does not divorce before the marriage of family " + family_group[i + 1]  + "." 
 #---------US11---------
