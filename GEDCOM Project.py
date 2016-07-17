@@ -175,7 +175,7 @@ for individual_id in individuals:
         if isDateBeforeOrEqual(individual['BIRT'], individual['DEAT'], 150):
             print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
     elif individual.has_key('BIRT'):
-        if isDateBeforeOrEqual(individual['BIRT'] currentDate, 150):
+        if isDateBeforeOrEqual(individual['BIRT'], currentDate, 150):
              print "ANOMALY: " , individual["NAME"], " is older than 150 years." 
     #---------US07---------
 
@@ -291,11 +291,23 @@ for family_id in families:
     for child_id in family['CHIL']:
         if wifeID and individuals[wifeID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[wifeID]['BIRT'], individuals[child_id]['BIRT'], 60):
-                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than her child, " individuals[child_id]["NAME"] + "."
+                print "ANOMALY: (Fam " + family_id + "): The mother is more than 60 years older than her child, " + individuals[child_id]["NAME"] + "."
         if husbandID and individuals[husbandID].has_key("BIRT") and individuals[child_id].has_key("BIRT"):
             if isDateBeforeOrEqual(individuals[husbandID]['BIRT'], individuals[child_id]['BIRT'], 80):
-                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than his child, " individuals[child_id]["NAME"] + "."
+                print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than his child, " + individuals[child_id]["NAME"] + "."
     #---------US12---------
+    
+    #---------US16---------
+    # Male last names
+    # All male members of a family should have the same last name
+    if husbandID:
+        lastName = individuals[husbandID]["NAME"].split(' ')[-1]
+        for child_id in family['CHIL']:
+            if individuals[child_id].has_key("SEX") and individuals[child_id]["SEX"] != "M": 
+                continue
+            if lastName != individuals[child_id]["NAME"].split(' ')[-1]:
+                print "ANOMALY: (Fam " + family_id + "): The father has a different last name than his child, " + individuals[child_id]["NAME"] + "." 
+    #---------US16---------
 
     #---------US21---------
     # Correct gender for role
