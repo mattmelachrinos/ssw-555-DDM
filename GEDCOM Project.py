@@ -26,10 +26,10 @@ def differenceInDate(date1,date2):
 
     difference = d2 - d1
     return difference.days
-    
+
 def stringToDate(date1):
     months = {"JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12}
-    
+
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
     date1date = int(date1[:-9])
@@ -46,6 +46,10 @@ families = {}
 
 # Object for all the individuals. Key is based off of the individual ID
 individuals = {}
+
+# Object for errors found in file parsing that should will print later
+
+errors = []
 
 # Current individual or family
 id_type = 'none' # When active, will be marked with FAM or INDI
@@ -66,6 +70,10 @@ for line in file:
 
         # Initiate the object for the new family or individual
         if(id_type == 'INDI'):
+            #---------US22---------
+            if id_num in individuals:
+                errors.append("Error: "+ id_num + " is already being used by " + individuals[id_num]["NAME"] + ". Don't trust relationships with " + id_num)
+            #---------US22---------
             individuals[id_num] = {}
         else:
             families[id_num] = {}
@@ -121,6 +129,10 @@ for family_id in sorted(families.keys()):
 
 #---------Error Checking---------
 
+for item in errors:
+    print item.upper()
+print ""
+print ""
 for individual_id in individuals:
     individual = individuals[individual_id]
 
@@ -148,9 +160,9 @@ for individual_id in individuals:
             print "ANOMALY: " , individual["NAME"], " lived passed 150 years."
     elif individual.has_key('BIRT'):
         if isDateBeforeOrEqual(individual['BIRT'], currentDate, 150):
-             print "ANOMALY: " , individual["NAME"], " is older than 150 years." 
+             print "ANOMALY: " , individual["NAME"], " is older than 150 years."
     #---------US07---------
-    
+
 # Contains the families for each parent
 groupMarriagesByParent = {}
 
@@ -162,12 +174,12 @@ for family_id in families:
     weddingDate = ""
     divorceDate = ""
     kidDict = {}
-    if family.has_key('HUSB'): 
+    if family.has_key('HUSB'):
         husbandID = family['HUSB']
         if not husbandID in groupMarriagesByParent:
             groupMarriagesByParent[husbandID] = []
         groupMarriagesByParent[husbandID] += [family_id]
-    if family.has_key('WIFE'): 
+    if family.has_key('WIFE'):
         wifeID = family['WIFE']
         if not wifeID in groupMarriagesByParent:
             groupMarriagesByParent[wifeID] = []
@@ -220,7 +232,7 @@ for family_id in families:
                 print "ERROR: ", individuals[kidDict[date1]]["NAME"], " and ", individuals[kidDict[date1]]["NAME"], " are not twins and are born less than 9 months apart."
 
     #---------US13---------
-    
+
     #---------US10---------
     # Marriage after 14
     # Marriage should occur after the age of 14
@@ -230,7 +242,7 @@ for family_id in families:
         if individuals[wifeID].has_key("BIRT") and differenceInDate(weddingDate,individuals[wifeID]['BIRT']) < 14:
             print "ANOMALY (Fam " + family_id + "): The marriage of " + individuals[wifeID]["NAME"] + " took place before she was 14 years old."
     #---------US10---------
-    
+
     #---------US34---------
     # List large age differences
     # The older spouse was more than twice as old as the younger spouse
@@ -239,7 +251,7 @@ for family_id in families:
         AgeofWife = differenceInDate(weddingDate,individuals[wifeID]['BIRT'])
         if AgeofHusband > 2 * AgeofWife or AgeofWife > 2 * AgeofHusband:
             print "ANOMALY (Fam " + family_id + "): There is a large age difference between " + individuals[husbandID]['NAME'] + " and " + individuals[wifeID]['NAME'] + "."
-    #---------US34---------      
+    #---------US34---------
 
     #---------US04---------
     # Marriage before divorce
@@ -279,17 +291,17 @@ for family_id in families:
             if isDateBeforeOrEqual(individuals[husbandID]['BIRT'], individuals[child_id]['BIRT'], 80):
                 print "ANOMALY: (Fam " + family_id + "): The father is more than 80 years older than his child, " + individuals[child_id]["NAME"] + "."
     #---------US12---------
-    
+
     #---------US16---------
     # Male last names
     # All male members of a family should have the same last name
     if husbandID:
         lastName = individuals[husbandID]["NAME"].split(' ')[-1]
         for child_id in family['CHIL']:
-            if individuals[child_id].has_key("SEX") and individuals[child_id]["SEX"] != "M": 
+            if individuals[child_id].has_key("SEX") and individuals[child_id]["SEX"] != "M":
                 continue
             if lastName != individuals[child_id]["NAME"].split(' ')[-1]:
-                print "ANOMALY: (Fam " + family_id + "): The father has a different last name than his child, " + individuals[child_id]["NAME"] + "." 
+                print "ANOMALY: (Fam " + family_id + "): The father has a different last name than his child, " + individuals[child_id]["NAME"] + "."
     #---------US16---------
 
     #---------US21---------
@@ -315,5 +327,5 @@ for parent_id in groupMarriagesByParent:
     for i in range(len(family_group) - 1):
         if families[family_group[i]].has_key('DIV'):
             if isDateBeforeOrEqual(families[family_group[i]]['DIV'], families[family_group[i + 1]]['MARR']): continue
-        print "ANOMALY: The family " + family_group[i] + " does not divorce before the marriage of family " + family_group[i + 1]  + "." 
+        print "ANOMALY: The family " + family_group[i] + " does not divorce before the marriage of family " + family_group[i + 1]  + "."
 #---------US11---------
