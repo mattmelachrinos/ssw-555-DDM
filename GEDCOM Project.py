@@ -220,6 +220,17 @@ for family_id in families:
             print "ANOMALY: ", individuals[child_id]["NAME"] , " was born after parents were divorced on (" + divorceDate + ")."
         #---------US08---------
 
+        #---------US17---------
+        # Parents not marrying children
+        if husbandID:
+            if husbandID == child_id:
+                print "ERROR:",individuals[wifeID]["NAME"], "Married her child,",individuals[child_id]["NAME"]
+        if wifeID:
+            if wifeID == child_id:
+                print "ERROR:",individuals[husbandID]["NAME"], "Married his child,",individuals[child_id]["NAME"]
+        #---------US17---------
+
+
     #---------US13---------
     # Sibling spacing
     # makes sure the children are spaced less than 2 days or more than 280
