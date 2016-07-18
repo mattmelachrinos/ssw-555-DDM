@@ -224,10 +224,10 @@ for family_id in families:
         # Parents not marrying children
         if husbandID:
             if husbandID == child_id:
-                print "ERROR:",individuals[wifeID]["NAME"], "Married her child,",individuals[child_id]["NAME"]
+                print "ERROR: ",individuals[wifeID]["NAME"], " Married her child, ",individuals[child_id]["NAME"]
         if wifeID:
             if wifeID == child_id:
-                print "ERROR:",individuals[husbandID]["NAME"], "Married his child,",individuals[child_id]["NAME"]
+                print "ERROR: ",individuals[husbandID]["NAME"], " Married his child, ",individuals[child_id]["NAME"]
         #---------US17---------
 
 
