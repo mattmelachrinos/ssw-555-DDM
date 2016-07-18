@@ -133,6 +133,7 @@ for item in errors:
     print item.upper()
 print ""
 print ""
+
 for individual_id in individuals:
     individual = individuals[individual_id]
 
@@ -247,8 +248,10 @@ for family_id in families:
     # List large age differences
     # The older spouse was more than twice as old as the younger spouse
     if husbandID and wifeID and weddingDate:
-        AgeofHusband = differenceInDate(weddingDate,individuals[husbandID]['BIRT'])
-        AgeofWife = differenceInDate(weddingDate,individuals[wifeID]['BIRT'])
+        if individuals[husbandID].has_key('BIRT'):
+            AgeofHusband = differenceInDate(weddingDate,individuals[husbandID]['BIRT'])
+        if individuals[wifeID].has_key('BIRT'):
+            AgeofWife = differenceInDate(weddingDate,individuals[wifeID]['BIRT'])
         if AgeofHusband > 2 * AgeofWife or AgeofWife > 2 * AgeofHusband:
             print "ANOMALY (Fam " + family_id + "): There is a large age difference between " + individuals[husbandID]['NAME'] + " and " + individuals[wifeID]['NAME'] + "."
     #---------US34---------
