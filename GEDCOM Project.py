@@ -151,6 +151,14 @@ for individual_id in individuals:
         print "User Story 01 - Dates before current date.\n"
         print "ERROR: The death date (" + individual['DEAT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"] + "."
     #---------US01---------
+    
+     #---------US35---------
+    # List recent births
+    # List all people in a GEDCOM file who were born in the last 30 days
+    if individual.has_key('BIRT') and differenceInDate(individuals[individualID]['BIRT'],currentDate) <= 30:
+        print "User Story 35 - List recent births.\n"
+        recentEvents.append(individuals[individualID]['NAME'] + " was born less than thirty days ago on, " + individuals[individualID]['BIRT'])
+    #---------US35---------
 
     #---------US03---------
     # Birth before death
