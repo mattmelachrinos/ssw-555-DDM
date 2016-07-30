@@ -152,7 +152,7 @@ for individual_id in individuals:
         print "ERROR: The death date (" + individual['DEAT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"] + "."
     #---------US01---------
     
-     #---------US35---------
+    #---------US35---------
     # List recent births
     # List all people in a GEDCOM file who were born in the last 30 days
     if individual.has_key('BIRT') and differenceInDate(individuals[individualID]['BIRT'],currentDate) <= 30:
