@@ -51,6 +51,10 @@ individuals = {}
 
 errors = []
 
+# Object for recent events that will print later, i.e births, deaths, survivors
+
+recentEvents = []
+
 # Current individual or family
 id_type = 'none' # When active, will be marked with FAM or INDI
 id_num = ''
@@ -205,6 +209,13 @@ for family_id in families:
             print "ERROR (Fam " + family_id + "): The wedding date (" + weddingDate + ") is before the birth of ", individuals[wifeID]["NAME"] + "."
     #---------US02---------
 
+    #---------US37---------
+    if husbandID and wifeID:
+        if individuals[husbandID].has_key('DEAT') and not individuals[wifeID].has_key('DEAT') and differenceInDate(individuals[husbandID]['DEAT'],currentDate) <= 30:
+            recentEvents.append(individuals[wifeID]['NAME']+ " survives her deceased husband, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
+        if individuals[wifeID].has_key('DEAT') and not individuals[husbandID].has_key('DEAT') and differenceInDate(individuals[wifeID]['DEAT'],currentDate) <= 30:
+            recentEvents.append(individuals[husbandID]['NAME']+ " survives his deceased wife, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
+    #---------US37---------
 
     for child_id in family['CHIL']:
         #---------US09---------
@@ -370,3 +381,12 @@ for parent_id in groupMarriagesByParent:
         print "User Story 11 - No bigamy.\n"
         print "ANOMALY: The family " + family_group[i] + " does not divorce before the marriage of family " + family_group[i + 1]  + "."
 #---------US11---------
+
+
+# Printing out the Events that have happened in the last 30 days
+print ""
+print "-----RECENT EVENTS-----"
+print "(Events that have happened in the last 30 days)"
+print ""
+for item in recentEvents:
+    print item
