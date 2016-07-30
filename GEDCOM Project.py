@@ -180,6 +180,14 @@ for individual_id in individuals:
             print "User Story 07 - Age over 150 years old.\n"
             print "ANOMALY: " , individual["NAME"], " is older than 150 years."
     #---------US07---------
+    
+    #---------US36---------
+    # List recent deaths
+    # List all people in a GEDCOM file who died in the last 30 days
+    if individual.has_key('DEAT') and differenceInDate(individuals[individualID]['DEAT'],currentDate) <= 30:
+        print "User Story 35 - List recent deaths.\n"
+        recentEvents.append(individuals[individualID]['NAME'] + " passed away less than thirty days ago on, " + individuals[individualID]['DEAT'])
+    #---------US36---------
 
 # Contains the families for each parent
 groupMarriagesByParent = {}
