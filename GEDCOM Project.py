@@ -210,10 +210,14 @@ for family_id in families:
     #---------US02---------
 
     #---------US37---------
+    # List recent survivors
+    # List all living spouses and descendants of people in a GEDCOM file who died in the last 30 days
     if husbandID and wifeID:
         if individuals[husbandID].has_key('DEAT') and not individuals[wifeID].has_key('DEAT') and differenceInDate(individuals[husbandID]['DEAT'],currentDate) <= 30:
+            print "User Story 37 - List recent survivors.\n"
             recentEvents.append(individuals[wifeID]['NAME']+ " survives her deceased husband, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
         if individuals[wifeID].has_key('DEAT') and not individuals[husbandID].has_key('DEAT') and differenceInDate(individuals[wifeID]['DEAT'],currentDate) <= 30:
+            print "User Story 37 - List recent survivors.\n"
             recentEvents.append(individuals[husbandID]['NAME']+ " survives his deceased wife, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
     #---------US37---------
 
