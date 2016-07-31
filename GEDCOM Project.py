@@ -33,7 +33,7 @@ def stringToDate(date1):
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
     date1date = int(date1[:-9])
-    return date(date1year,months[date1month],date1date)
+
 
 # All the valid tags
 zero_tags = ["HEAD", "TRLR", "NOTE"]
@@ -95,7 +95,16 @@ for line in file:
                     families[id_num][parts[1]] = ' '.join(parts[2:])
         # Prepare to add a date tag
         if parts[0] == '1' and parts[1] in ["BIRT", "DEAT", "MARR", "DIV"]:
-            date_type = parts[1]
+            #---------US42---------
+            # Reject Illegitimate dates
+            # All dates should be on the calendar. If not, do not add to data structure
+            try:
+                stringToDate(' '.join(parts[2:]))
+                date_type = parts[1]
+            except ValueError:
+                print "User Story 42 - Reject Illegitimate dates.\n"
+                print ' '.join(parts[2:]) + "is not a legitimate date"
+            #---------US42---------
         # Add the date based on the previously found tag
         if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
             # BIRT and DEAT tags belong to an individual
@@ -153,7 +162,7 @@ for individual_id in individuals:
         print "User Story 01 - Dates before current date.\n"
         print "ERROR: The death date (" + individual['DEAT'] + ") is after current date (" + currentDate + ") for " , individual["NAME"] + "."
     #---------US01---------
-    
+
     #---------US35---------
     # List recent births
     # List all people in a GEDCOM file who were born in the last 30 days
@@ -194,7 +203,7 @@ for individual_id in individuals:
         else:
             uniqueNameAndBirth += [key]
     #---------US23---------
-    
+
     #---------US36---------
     # List recent deaths
     # List all people in a GEDCOM file who died in the last 30 days
@@ -288,7 +297,7 @@ for family_id in families:
                 print "User Story 17 - Parents not marrying children.\n"
                 print "ERROR: ",individuals[husbandID]["NAME"], " married his child, ",individuals[child_id]["NAME"]
         #---------US17---------
-        
+
         #---------US25---------
         # Unique first names in families
         # No more than one child with the same name and birth date should appear in a family
