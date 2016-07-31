@@ -190,7 +190,7 @@ for individual_id in individuals:
         key = individual['NAME'] + individual['BIRT']
         if key in uniqueNameAndBirth:
             print "User Story 23 - Unique name and birth date.\n"
-            print "ERROR: " , individual["NAME"], " with the same birthday already exists."
+            print "ERROR: " , individual["NAME"], " with the same birthday and name already exists."
         else:
             uniqueNameAndBirth += [key]
     #---------US23---------
@@ -251,6 +251,7 @@ for family_id in families:
             recentEvents.append(individuals[husbandID]['NAME']+ " survives his deceased wife, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
     #---------US37---------
 
+    uniqueNameAndBirth = []
     for child_id in family['CHIL']:
         #---------US09---------
         # Birth before death of parents
@@ -287,6 +288,18 @@ for family_id in families:
                 print "User Story 17 - Parents not marrying children.\n"
                 print "ERROR: ",individuals[husbandID]["NAME"], " married his child, ",individuals[child_id]["NAME"]
         #---------US17---------
+        
+        #---------US25---------
+        # Unique first names in families
+        # No more than one child with the same name and birth date should appear in a family
+        if individuals[child_id].has_key('BIRT'):
+            key = individuals[child_id]['NAME'] + individuals[child_id]['BIRT']
+            if key in uniqueNameAndBirth:
+                print "User Story 25 - Unique first names in families.\n"
+                print "ERROR (Fam " + family_id + "): " , individuals[child_id]["NAME"], " with the same birthday and name already exists in the family."
+            else:
+                uniqueNameAndBirth += [key]
+        #---------US25---------
 
 
     #---------US13---------
