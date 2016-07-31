@@ -33,7 +33,7 @@ def stringToDate(date1):
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
     date1date = int(date1[:-9])
-
+    return date(date1year,months[date1month],date1date)
 
 # All the valid tags
 zero_tags = ["HEAD", "TRLR", "NOTE"]
