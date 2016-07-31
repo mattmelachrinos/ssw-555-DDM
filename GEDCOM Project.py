@@ -138,6 +138,8 @@ for item in errors:
 print ""
 print ""
 
+uniqueNameAndBirth = []
+
 for individual_id in individuals:
     individual = individuals[individual_id]
 
@@ -155,9 +157,9 @@ for individual_id in individuals:
     #---------US35---------
     # List recent births
     # List all people in a GEDCOM file who were born in the last 30 days
-    if individual.has_key('BIRT') and differenceInDate(individuals[individualID]['BIRT'],currentDate) <= 30:
+    if individual.has_key('BIRT') and differenceInDate(individual['BIRT'],currentDate) <= 30:
         print "User Story 35 - List recent births.\n"
-        recentEvents.append(individuals[individualID]['NAME'] + " was born less than thirty days ago on, " + individuals[individualID]['BIRT'])
+        recentEvents.append(individual['NAME'] + " was born less than thirty days ago on, " + individual['BIRT'])
     #---------US35---------
 
     #---------US03---------
@@ -180,13 +182,25 @@ for individual_id in individuals:
             print "User Story 07 - Age over 150 years old.\n"
             print "ANOMALY: " , individual["NAME"], " is older than 150 years."
     #---------US07---------
+
+    #---------US23---------
+    # Unique name and birth date
+    # No more than one individual with the same name and birth date should appear in a GEDCOM file
+    if individual.has_key('BIRT'):
+        key = individual['NAME'] + individual['BIRT']
+        if key in uniqueNameAndBirth:
+            print "User Story 23 - Unique name and birth date.\n"
+            print "ERROR: " , individual["NAME"], " with the same birthday already exists."
+        else:
+            uniqueNameAndBirth += [key]
+    #---------US23---------
     
     #---------US36---------
     # List recent deaths
     # List all people in a GEDCOM file who died in the last 30 days
-    if individual.has_key('DEAT') and differenceInDate(individuals[individualID]['DEAT'],currentDate) <= 30:
+    if individual.has_key('DEAT') and differenceInDate(individual['DEAT'],currentDate) <= 30:
         print "User Story 35 - List recent deaths.\n"
-        recentEvents.append(individuals[individualID]['NAME'] + " passed away less than thirty days ago on, " + individuals[individualID]['DEAT'])
+        recentEvents.append(individual['NAME'] + " passed away less than thirty days ago on, " + individual['DEAT'])
     #---------US36---------
 
 # Contains the families for each parent
