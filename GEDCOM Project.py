@@ -15,6 +15,7 @@ except IOError:
     sys.exit()
 
 currentDate = time.strftime("%d %b %Y") # Ex: 19 JAN 2007
+months = {"JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12}
 
 def isDateBeforeOrEqual(date1,date2,diffYear=0):
     return (differenceInDate(date1, date2) - diffYear * 360) >= 0
@@ -28,8 +29,6 @@ def differenceInDate(date1,date2):
     return difference.days
 
 def stringToDate(date1):
-    months = {"JAN":1,"FEB":2,"MAR":3,"APR":4,"MAY":5,"JUN":6,"JUL":7,"AUG":8,"SEP":9,"OCT":10,"NOV":11,"DEC":12}
-
     date1year = int(date1[-4:])
     date1month = date1[-8:-5].upper()
     date1date = int(date1[:-9])
@@ -101,19 +100,18 @@ for line in file:
             #---------US42---------
             # Reject Illegitimate dates
             # All dates should be on the calendar. If not, do not add to data structure
-            try:
-                stringToDate(' '.join(parts[2:]))
+            if len(parts) != 5 or int(parts[2]) < 0 or int(parts[2]) > 31 or (not parts[3] in months) or int(parts[4]) < 0:
+                print "User Story 42 - Reject Illegitimate dates.\n"
+                print ' '.join(parts[2:]) + " is not a legitimate date"
+            else:
                 # BIRT and DEAT tags belong to an individual
                 if id_type == 'INDI' and date_type in ["BIRT", "DEAT"]:
                     individuals[id_num][date_type] = ' '.join(parts[2:])
                 # MARR and DIV belong to a family
                 elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
                     families[id_num][date_type] = ' '.join(parts[2:])
-            except ValueError:
-                print "User Story 42 - Reject Illegitimate dates.\n"
-                print ' '.join(parts[2:]) + "is not a legitimate date"
             #---------US42---------
-
+                        
             date_type = ''
 
 
@@ -341,11 +339,13 @@ for family_id in families:
     # List large age differences
     # The older spouse was more than twice as old as the younger spouse
     if husbandID and wifeID and weddingDate:
+        AgeofHusband = 0
+        AgeofWife = 0
         if individuals[husbandID].has_key('BIRT'):
             AgeofHusband = differenceInDate(weddingDate,individuals[husbandID]['BIRT'])
         if individuals[wifeID].has_key('BIRT'):
             AgeofWife = differenceInDate(weddingDate,individuals[wifeID]['BIRT'])
-        if AgeofHusband > 2 * AgeofWife or AgeofWife > 2 * AgeofHusband:
+        if AgeofHusband and AgeofWife and (AgeofHusband > 2 * AgeofWife or AgeofWife > 2 * AgeofHusband):
             print "User Story 34 - List large age differences.\n"
             print "ANOMALY (Fam " + family_id + "): There is a large age difference between " + individuals[husbandID]['NAME'] + " and " + individuals[wifeID]['NAME'] + "."
     #---------US34---------
