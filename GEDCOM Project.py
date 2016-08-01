@@ -255,7 +255,7 @@ for family_id in families:
             recentEvents.append(individuals[wifeID]['NAME']+ " survives her deceased husband, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
         if individuals[wifeID].has_key('DEAT') and not individuals[husbandID].has_key('DEAT') and differenceInDate(individuals[wifeID]['DEAT'],currentDate) <= 30:
             print "User Story 37 - List recent survivors.\n"
-            recentEvents.append(individuals[husbandID]['NAME']+ " survives his deceased wife, "+ individuals[husbandID]['NAME']+ ", who passed on "+ individuals[husbandID]['DEAT'])
+            recentEvents.append(individuals[husbandID]['NAME']+ " survives his deceased wife, "+ individuals[wifeID]['NAME']+ ", who passed on "+ individuals[wifeID]['DEAT'])
     #---------US37---------
 
     uniqueNameAndBirth = []
