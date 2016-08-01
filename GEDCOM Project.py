@@ -95,24 +95,24 @@ for line in file:
                     families[id_num][parts[1]] = ' '.join(parts[2:])
         # Prepare to add a date tag
         if parts[0] == '1' and parts[1] in ["BIRT", "DEAT", "MARR", "DIV"]:
+            date_type = parts[1]
+        # Add the date based on the previously found tag
+        if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
             #---------US42---------
             # Reject Illegitimate dates
             # All dates should be on the calendar. If not, do not add to data structure
             try:
                 stringToDate(' '.join(parts[2:]))
-                date_type = parts[1]
+                # BIRT and DEAT tags belong to an individual
+                if id_type == 'INDI' and date_type in ["BIRT", "DEAT"]:
+                    individuals[id_num][date_type] = ' '.join(parts[2:])
+                # MARR and DIV belong to a family
+                elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
+                    families[id_num][date_type] = ' '.join(parts[2:])
             except ValueError:
                 print "User Story 42 - Reject Illegitimate dates.\n"
                 print ' '.join(parts[2:]) + "is not a legitimate date"
             #---------US42---------
-        # Add the date based on the previously found tag
-        if date_type != '' and parts[0] == '2' and parts[1] == 'DATE':
-            # BIRT and DEAT tags belong to an individual
-            if id_type == 'INDI' and date_type in ["BIRT", "DEAT"]:
-                individuals[id_num][date_type] = ' '.join(parts[2:])
-            # MARR and DIV belong to a family
-            elif id_type == 'FAM' and date_type in ["MARR", "DIV"]:
-                families[id_num][date_type] = ' '.join(parts[2:])
 
             date_type = ''
 
