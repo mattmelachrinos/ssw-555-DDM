@@ -206,7 +206,7 @@ for individual_id in individuals:
     # List recent deaths
     # List all people in a GEDCOM file who died in the last 30 days
     if individual.has_key('DEAT') and differenceInDate(individual['DEAT'],currentDate) > 0 and differenceInDate(individual['DEAT'],currentDate) <= 30:
-        print "User Story 35 - List recent deaths.\n"
+        print "User Story 36 - List recent deaths.\n"
         recentEvents.append(individual['NAME'] + " passed away less than thirty days ago on, " + individual['DEAT'])
     #---------US36---------
 
