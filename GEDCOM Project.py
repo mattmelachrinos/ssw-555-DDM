@@ -199,7 +199,7 @@ for individual_id in individuals:
         key = individual['NAME'] + individual['BIRT']
         if key in uniqueNameAndBirth:
             print "User Story 23 - Unique name and birth date.\n"
-            print "ERROR: " , individual["NAME"], " with the same birthday and name already exists."
+            print "ANOMALY: " , individual["NAME"], " with the same birthday and name already exists."
         else:
             uniqueNameAndBirth += [key]
     #---------US23---------
@@ -305,7 +305,7 @@ for family_id in families:
             key = individuals[child_id]['NAME'] + individuals[child_id]['BIRT']
             if key in uniqueNameAndBirth:
                 print "User Story 25 - Unique first names in families.\n"
-                print "ERROR (Fam " + family_id + "): " , individuals[child_id]["NAME"], " with the same birthday and name already exists in the family."
+                print "ANOMALY (Fam " + family_id + "): " , individuals[child_id]["NAME"], " with the same birthday and name already exists in the family."
             else:
                 uniqueNameAndBirth += [key]
         #---------US25---------
