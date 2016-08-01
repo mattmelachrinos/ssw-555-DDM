@@ -164,7 +164,7 @@ for individual_id in individuals:
     #---------US35---------
     # List recent births
     # List all people in a GEDCOM file who were born in the last 30 days
-    if individual.has_key('BIRT') and differenceInDate(individual['BIRT'],currentDate) <= 30:
+    if individual.has_key('BIRT') and differenceInDate(individual['BIRT'],currentDate) > 0 and differenceInDate(individual['BIRT'],currentDate) <= 30:
         print "User Story 35 - List recent births.\n"
         recentEvents.append(individual['NAME'] + " was born less than thirty days ago on, " + individual['BIRT'])
     #---------US35---------
@@ -205,7 +205,7 @@ for individual_id in individuals:
     #---------US36---------
     # List recent deaths
     # List all people in a GEDCOM file who died in the last 30 days
-    if individual.has_key('DEAT') and differenceInDate(individual['DEAT'],currentDate) <= 30:
+    if individual.has_key('DEAT') and differenceInDate(individual['DEAT'],currentDate) > 0 and differenceInDate(individual['DEAT'],currentDate) <= 30:
         print "User Story 35 - List recent deaths.\n"
         recentEvents.append(individual['NAME'] + " passed away less than thirty days ago on, " + individual['DEAT'])
     #---------US36---------
